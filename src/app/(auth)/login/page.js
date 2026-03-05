@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const params = useSearchParams();
   const from   = params.get("from") || "/dashboard";
@@ -52,13 +52,13 @@ export default function LoginPage() {
 
           <form onSubmit={submit}>
             <div className="form-group">
-              <label className="form-label">Email</label>
-              <input name="email" type="email" required className="form-input"
+              <label htmlFor="login-email" className="form-label">Email</label>
+              <input id="login-email" name="email" type="email" required className="form-input"
                 placeholder="you@example.com" value={form.email} onChange={handle} autoComplete="email" />
             </div>
             <div className="form-group">
-              <label className="form-label">Password</label>
-              <input name="password" type="password" required className="form-input"
+              <label htmlFor="login-password" className="form-label">Password</label>
+              <input id="login-password" name="password" type="password" required className="form-input"
                 placeholder="••••••••" value={form.password} onChange={handle} autoComplete="current-password" />
             </div>
             <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: ".5rem" }} disabled={loading}>
@@ -78,5 +78,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="loading-screen"><div className="spinner" /></div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

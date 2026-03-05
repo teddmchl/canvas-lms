@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function RegisterPage() {
+function RegisterContent() {
   const router = useRouter();
   const params = useSearchParams();
   const defaultRole = params.get("role") || "student";
@@ -65,18 +65,18 @@ export default function RegisterPage() {
 
           <form onSubmit={submit}>
             <div className="form-group">
-              <label className="form-label">Full name</label>
-              <input name="name" type="text" required className="form-input"
+              <label htmlFor="reg-name" className="form-label">Full name</label>
+              <input id="reg-name" name="name" type="text" required className="form-input"
                 placeholder="Jane Smith" value={form.name} onChange={handle} autoComplete="name" />
             </div>
             <div className="form-group">
-              <label className="form-label">Email</label>
-              <input name="email" type="email" required className="form-input"
+              <label htmlFor="reg-email" className="form-label">Email</label>
+              <input id="reg-email" name="email" type="email" required className="form-input"
                 placeholder="jane@example.com" value={form.email} onChange={handle} autoComplete="email" />
             </div>
             <div className="form-group">
-              <label className="form-label">Password</label>
-              <input name="password" type="password" required className="form-input"
+              <label htmlFor="reg-password" className="form-label">Password</label>
+              <input id="reg-password" name="password" type="password" required className="form-input"
                 placeholder="Min. 8 characters" value={form.password} onChange={handle} autoComplete="new-password" />
             </div>
             <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: ".5rem" }} disabled={loading}>
@@ -90,5 +90,13 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="loading-screen"><div className="spinner" /></div>}>
+      <RegisterContent />
+    </Suspense>
   );
 }

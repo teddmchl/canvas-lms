@@ -141,7 +141,7 @@ export default function GradingPage({ params }) {
       </div>
 
       <div className="container" style={{ paddingBottom: "3rem" }}>
-        {msg && <div className="alert alert-success">{msg}</div>}
+        {msg && <div className="alert alert-success" aria-live="polite">{msg}</div>}
 
         {filtered.length === 0 ? (
           <div className="empty-state" style={{ background: "#fff", border: "1px solid var(--rule)", borderRadius: "var(--radius)" }}>
@@ -211,9 +211,10 @@ export default function GradingPage({ params }) {
                   <form onSubmit={submitGrade}>
                     <div style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start", flexWrap: "wrap" }}>
                       <div style={{ flex: "0 0 auto" }}>
-                        <label className="form-label" style={{ marginBottom: ".5rem", display: "block" }}>Grade</label>
+                        <label htmlFor="student-grade" className="form-label" style={{ marginBottom: ".5rem", display: "block" }}>Grade</label>
                         <div className="grade-input-wrap">
                           <input
+                            id="student-grade"
                             type="number"
                             className="grade-input"
                             min={0}
@@ -231,8 +232,9 @@ export default function GradingPage({ params }) {
                         </div>
                       </div>
                       <div style={{ flex: 1, minWidth: 200 }}>
-                        <label className="form-label" style={{ marginBottom: ".5rem", display: "block" }}>Feedback</label>
+                        <label htmlFor="student-feedback" className="form-label" style={{ marginBottom: ".5rem", display: "block" }}>Feedback</label>
                         <textarea
+                          id="student-feedback"
                           className="form-textarea"
                           rows={3}
                           placeholder="Write feedback for the student…"

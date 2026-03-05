@@ -108,7 +108,7 @@ export default function CourseManageClient({ course: initial, assignments: initi
       </div>
 
       <div className="container" style={{ paddingBottom: "3rem" }}>
-        {msg && <div className="alert alert-success">{msg}</div>}
+        {msg && <div className="alert alert-success" aria-live="polite">{msg}</div>}
 
         {/* Tab bar */}
         <div style={{ display: "flex", gap: ".25rem", borderBottom: "2px solid var(--rule)", marginBottom: "2rem" }}>
@@ -179,26 +179,26 @@ export default function CourseManageClient({ course: initial, assignments: initi
                 <h3 style={{ fontFamily: "var(--ff-serif)", fontSize: "1rem", marginBottom: "1rem" }}>New Assignment</h3>
                 <div className="form-row">
                   <div className="form-group">
-                    <label className="form-label">Title *</label>
-                    <input className="form-input" required placeholder="Assignment title"
+                    <label htmlFor="assign-title" className="form-label">Title *</label>
+                    <input id="assign-title" className="form-input" required placeholder="Assignment title"
                       value={newAssign.title} onChange={e => setNewAssign(p => ({ ...p, title: e.target.value }))} />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Max Points</label>
-                    <input className="form-input" type="number" min={1} max={1000}
+                    <label htmlFor="assign-points" className="form-label">Max Points</label>
+                    <input id="assign-points" className="form-input" type="number" min={1} max={1000}
                       value={newAssign.maxPoints} onChange={e => setNewAssign(p => ({ ...p, maxPoints: parseInt(e.target.value) || 100 }))} />
                   </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
-                    <label className="form-label">Due Date</label>
-                    <input className="form-input" type="date"
+                    <label htmlFor="assign-due" className="form-label">Due Date</label>
+                    <input id="assign-due" className="form-input" type="date"
                       value={newAssign.dueDate} onChange={e => setNewAssign(p => ({ ...p, dueDate: e.target.value }))} />
                   </div>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Instructions</label>
-                  <textarea className="form-textarea" rows={3} placeholder="What should students do?"
+                  <label htmlFor="assign-desc" className="form-label">Instructions</label>
+                  <textarea id="assign-desc" className="form-textarea" rows={3} placeholder="What should students do?"
                     value={newAssign.description} onChange={e => setNewAssign(p => ({ ...p, description: e.target.value }))} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end", gap: ".75rem" }}>
@@ -244,21 +244,21 @@ export default function CourseManageClient({ course: initial, assignments: initi
             <div style={{ background: "#fff", border: "1px solid var(--rule)", borderRadius: "var(--radius)", padding: "2rem", marginBottom: "1.25rem" }}>
               <h3 style={{ fontFamily: "var(--ff-serif)", marginBottom: "1.5rem", paddingBottom: ".75rem", borderBottom: "1px solid var(--rule)" }}>Edit Course</h3>
               <div className="form-group">
-                <label className="form-label">Title *</label>
-                <input className="form-input" required value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
+                <label htmlFor="course-title" className="form-label">Title *</label>
+                <input id="course-title" className="form-input" required value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
               </div>
               <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea className="form-textarea" rows={4} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+                <label htmlFor="course-desc" className="form-label">Description</label>
+                <textarea id="course-desc" className="form-textarea" rows={4} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Subject</label>
-                  <input className="form-input" value={form.subject} onChange={e => setForm(p => ({ ...p, subject: e.target.value }))} />
+                  <label htmlFor="course-subject" className="form-label">Subject</label>
+                  <input id="course-subject" className="form-input" value={form.subject} onChange={e => setForm(p => ({ ...p, subject: e.target.value }))} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Level</label>
-                  <select className="form-select" value={form.level} onChange={e => setForm(p => ({ ...p, level: e.target.value }))}>
+                  <label htmlFor="course-level" className="form-label">Level</label>
+                  <select id="course-level" className="form-select" value={form.level} onChange={e => setForm(p => ({ ...p, level: e.target.value }))}>
                     {["Beginner", "Intermediate", "Advanced"].map(l => <option key={l}>{l}</option>)}
                   </select>
                 </div>
@@ -267,7 +267,7 @@ export default function CourseManageClient({ course: initial, assignments: initi
                 <label className="form-label">Cover Colour</label>
                 <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap", marginTop: ".25rem" }}>
                   {COLORS.map(c => (
-                    <button key={c} type="button" onClick={() => setForm(p => ({ ...p, coverColor: c }))}
+                    <button key={c} type="button" onClick={() => setForm(p => ({ ...p, coverColor: c }))} aria-label={`Select color ${c}`}
                       style={{ width: 32, height: 32, borderRadius: "50%", background: c, border: `3px solid ${form.coverColor === c ? "var(--ink)" : "transparent"}`, outline: form.coverColor === c ? "2px solid #fff" : "none", outlineOffset: "-4px", cursor: "pointer" }} />
                   ))}
                 </div>

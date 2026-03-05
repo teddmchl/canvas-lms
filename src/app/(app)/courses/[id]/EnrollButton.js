@@ -8,6 +8,10 @@ export default function EnrollButton({ courseId, isEnrolled: initial, published 
   const router = useRouter();
 
   const toggle = async () => {
+    if (enrolled) {
+      if (!window.confirm("Are you sure you want to unenroll from this course? This action cannot be undone.")) return;
+    }
+
     setLoading(true);
     if (!enrolled) {
       const r = await fetch("/api/enrollments", {

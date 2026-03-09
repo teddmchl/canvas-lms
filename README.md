@@ -2,7 +2,7 @@
 
 A comprehensive, production-ready Learning Management System (LMS) designed with a premium, academic editorial aesthetic. Built to move beyond simple MVPs, this V1 release focuses on backend robustness, real-time interactivity, and a seamless developer-to-student experience.
 
-**[Live Demo](https://canvas-lms.vercel.app) | [Portfolio Case Study](https://teddonyesero.vercel.app)**
+**[Live Demo](https://canvas-lms-one.vercel.app/) | [Portfolio Case Study](https://teddonyesero.vercel.app)**
 
 ---
 

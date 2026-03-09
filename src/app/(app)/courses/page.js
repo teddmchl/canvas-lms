@@ -9,9 +9,16 @@ export default async function CoursesPage({ searchParams }) {
   await connectDB();
 
   const subject = searchParams?.subject || "";
+  const queryParam = searchParams?.q || "";
 
   const query = { published: true };
   if (subject) query.subject = subject;
+  if (queryParam) {
+    query.$or = [
+      { title: { $regex: queryParam, $options: "i" } },
+      { description: { $regex: queryParam, $options: "i" } }
+    ];
+  }
 
   const courses = await Course.find(query)
     .populate("instructor", "name")
@@ -51,16 +58,30 @@ export default async function CoursesPage({ searchParams }) {
       </div>
 
       <div className="container" style={{ paddingBottom: "3rem" }}>
-        {/* Subject filters */}
-        {subjects.length > 0 && (
-          <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", marginBottom: "2rem" }}>
-            <Link href="/courses" className={`btn btn-sm ${!subject ? "btn-primary" : "btn-secondary"}`}>All</Link>
-            {subjects.map(s => (
-              <Link key={s} href={`/courses?subject=${encodeURIComponent(s)}`}
-                className={`btn btn-sm ${subject === s ? "btn-primary" : "btn-secondary"}`}>{s}</Link>
-            ))}
-          </div>
-        )}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "2rem", flexWrap: "wrap", marginBottom: "2rem" }}>
+          <form action="/courses" method="GET" className="search-bar" style={{ marginBottom: 0 }}>
+            {subject && <input type="hidden" name="subject" value={subject} />}
+            <input 
+              type="text" 
+              name="q" 
+              placeholder="Search courses…" 
+              defaultValue={queryParam}
+              className="search-input"
+            />
+            <button type="submit" className="btn btn-primary" style={{ padding: "0 1.25rem" }}>Search</button>
+          </form>
+
+          {/* Subject filters */}
+          {subjects.length > 0 && (
+            <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
+              <Link href="/courses" className={`btn btn-sm ${!subject ? "btn-primary" : "btn-secondary"}`}>All</Link>
+              {subjects.map(s => (
+                <Link key={s} href={`/courses?subject=${encodeURIComponent(s)}${queryParam ? `&q=${encodeURIComponent(queryParam)}` : ""}`}
+                  className={`btn btn-sm ${subject === s ? "btn-primary" : "btn-secondary"}`}>{s}</Link>
+              ))}
+            </div>
+          )}
+        </div>
 
         {courses.length === 0 ? (
           <div className="empty-state">

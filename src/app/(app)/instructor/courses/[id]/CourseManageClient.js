@@ -78,6 +78,22 @@ export default function CourseManageClient({ course: initial, assignments: initi
     setAssignLoading(false);
   };
 
+  /* ── Delete course ── */
+  const deleteCourse = async () => {
+    if (!window.confirm("CRITICAL: Are you sure you want to PERMANENTLY delete this course? This will remove all assignments, submissions, and student enrollments. This action is irreversible.")) return;
+    
+    setSaving(true);
+    const r = await fetch(`/api/courses/${course._id}`, { method: "DELETE" });
+    if (r.ok) {
+      router.push("/instructor/courses");
+      router.refresh();
+    } else {
+      const data = await r.json();
+      flash(data.error || "Failed to delete course");
+      setSaving(false);
+    }
+  };
+
   const tabs = ["overview", "assignments", "settings"];
 
   return (
@@ -274,7 +290,10 @@ export default function CourseManageClient({ course: initial, assignments: initi
                 </div>
               </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: ".75rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: ".75rem" }}>
+              <button type="button" onClick={deleteCourse} disabled={saving} className="btn " style={{ background: "var(--red-pale)", color: "var(--red)", border: "1px solid var(--red-bdr)", fontWeight: 600 }}>
+                Delete Course
+              </button>
               <button type="submit" disabled={saving} className="btn btn-primary">
                 {saving ? "Saving…" : "Save Changes"}
               </button>

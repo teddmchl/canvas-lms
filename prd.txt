@@ -1,0 +1,89 @@
+⊙
+Product Requirement Doc
+Canvas LMS — Anti Vibe-Code UI Revision
+
+Product
+Canvas LMS
+Status
+UI Revision — v1.1
+Priority
+High — pre-launch
+
+••  Problem
+
+What problem are we solving? For whom? When do they experience it? Why does it matter?
+
+The Canvas LMS UI currently exhibits three patterns that are widely recognised as signals of AI-generated or "vibe-coded" interfaces. Visitors — especially developers, hiring managers, and technical educators who are the target audience — will notice these patterns instantly and associate the product with low-effort tooling rather than a credible, production-grade system.
+
+This matters because the app is part of a developer portfolio. Its primary job is to demonstrate engineering credibility. If the UI immediately reads as auto-generated, it undermines every technical decision made in the backend, regardless of how well those are documented.
+
+The three specific dead giveaways:
+
+	•	Gradient overuse
+	•	Purple-to-blue gradients and ambient "glow" effects on interactive elements, cards, and backgrounds are the single most common fingerprint of AI-generated UI. Even when the gradient is technically "on brand", the overuse pattern reads as default rather than designed.
+	•	Generic icon set with no audience targeting
+	•	Default icon libraries (typically Heroicons, Lucide, or Font Awesome defaults) used without curation feel lifted from a starter template. Icons are small but they are everywhere — when they don't speak to the specific context (academic, learning-oriented), the app loses specificity.
+	•	Dark mode as default without contextual justification
+	•	Dark mode defaults are a tell. Unless the product is a developer tool, a media player, or a coding environment, dark mode default signals aesthetic mimicry rather than audience research. A learning management platform used in natural light by students and educators has no ergonomic or contextual reason to be dark by default.
+
+↻  Proposal
+
+How are we solving this? What alternatives did we consider? How will we know it worked?
+
+We are making targeted, high-leverage CSS changes to the Canvas LMS that eliminate the three vibe-code signals. No new libraries, no full redesign. The existing editorial-academic direction (Source Serif 4, Outfit, parchment palette) is already correctly positioned — we are reinforcing it, not replacing it.
+
+Fix 1 — Remove all gradient usage:
+	•	Audit globals.css for any gradient declarations (background, background-image, linear-gradient, radial-gradient)
+	•	The hero section radial-gradient behind the headline is the highest-risk element — it is subtle but present; convert to a clean flat background
+	•	The auth panel left side currently has a radial-gradient blue glow behind the headline — replace with a flat ink background with a narrow left-aligned accent border on the card
+	•	Replace any box-shadow glow effects with hard or no shadows
+
+Fix 2 — Replace generic icons with context-appropriate alternatives:
+	•	Audit every emoji and icon used as UI chrome (not content): the ⊙ target, the 📚 📝 📊 section icons in the landing features grid
+	•	Replace generic emoji placeholders (🎓 📚) in the landing feature grid with inline SVG icons drawn specifically for academic context — stack of books outline, pencil-on-paper, grade bell curve
+	•	The Navbar contains no icons currently — good; keep it text-only
+	•	The empty state icons (📭 🔍) in the grading view should become simple monochrome SVG illustrations, not emoji
+
+Fix 3 — Confirm and protect the light mode default:
+	•	Verify no prefers-color-scheme: dark media query exists in globals.css that would flip the palette
+	•	Explicitly document in the README that light mode is the intentional, audience-appropriate default
+	•	Do not add a dark mode toggle — the parchment editorial aesthetic has no dark equivalent and a toggle implies it was a design option rather than a deliberate choice
+
+Alternatives considered:
+	•	Full icon library swap (e.g. Phosphor) — rejected; too much scope, too many new default choices that reintroduce the same problem
+	•	Complete colour system redesign — rejected; the existing parchment palette is already well-positioned
+	•	Adding a dark mode toggle to "show range" — rejected; it would mean building a second design system that undermines the intentional direction of the first
+
+✈  Plan
+
+What exactly are we building? How do we know it works? When will it be ready?
+
+Deliverable: Updated globals.css with all gradient/glow removed + 3–5 custom SVG icons replacing the most visible emoji placeholders.
+
+Definition of done:
+	•	Zero instances of linear-gradient or radial-gradient remain in globals.css
+	•	Zero glow box-shadows (multi-layer shadows with opacity) remain on interactive elements
+	•	The landing page feature grid uses purpose-drawn SVGs, not emoji
+	•	The grading interface empty state uses a custom SVG illustration
+	•	A senior developer who did not build the app cannot identify it as AI-generated from the UI alone within 10 seconds
+
+Implementation steps:
+	•	Question 1: Does everyone know what we are launching?
+	•	UI-only pass on globals.css (gradient audit + glow audit) and landing page component. No API changes. No schema changes.
+
+	•	Question 2: Are we sure this is going to work?
+	•	The root cause of vibe-code perception is pattern matching, not aesthetics. Removing the three most recognisable patterns directly addresses the root cause.
+	•	The parchment editorial direction is already differentiated — we are protecting it, not undoing it.
+
+	•	Question 3: What are our launch steps?
+	•	Step 1 — Gradient audit: grep globals.css for gradient, glow, rgba shadow — document all instances
+	•	Step 2 — Gradient removal: replace hero radial-gradient with flat parchment background; replace auth panel glow with flat ink (#151210) and a 3px left accent border
+	•	Step 3 — Shadow audit: identify any box-shadows with 3+ layers or spread > 8px; replace with var(--shadow) or remove
+	•	Step 4 — Icon design: draw 4 context-specific SVG icons for the landing features grid (course, assignment, analytics, enrolment)
+	•	Step 5 — Icon swap: replace emoji in landing page feature grid and grading empty states with inline SVGs
+	•	Step 6 — Light mode verification: confirm no dark mode media queries exist; add a comment to globals.css marking light-mode as intentional default
+	•	Step 7 — Review: walk through the app as a first-time visitor; the words "Looks like a starter template" should not be a possible response
+
+	•	🚀  It's ship time.
+
+… and feel free to link this to the Canvas LMS globals.css and landing page component when implementing

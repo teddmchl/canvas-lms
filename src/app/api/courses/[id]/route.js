@@ -81,12 +81,7 @@ export async function DELETE(req, { params }) {
   if (!course) return err("Not found", 404);
   if (course.instructor.toString() !== session.id) return err("Forbidden", 403);
 
-  await Promise.all([
-    Course.findByIdAndDelete(params.id),
-    Assignment.deleteMany({ course: params.id }),
-    Enrollment.deleteMany({ course: params.id }),
-    Submission.deleteMany({ course: params.id }),
-  ]);
+  await Course.findOneAndDelete({ _id: params.id });
 
   return ok({ message: "Course deleted" });
 }

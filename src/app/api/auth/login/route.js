@@ -2,8 +2,12 @@ import { connectDB } from "@/lib/db";
 import User from "@/lib/models/User";
 import { signToken } from "@/lib/auth";
 import { ok, err } from "@/lib/api";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(req) {
+  const { isRateLimited } = rateLimit(req, { limit: 5, ttl: 60000 });
+  if (isRateLimited) return err("Too many login attempts. Please try again later.", 429);
+
   await connectDB();
   const { email, password } = await req.json();
   if (!email || !password) return err("Email and password required");

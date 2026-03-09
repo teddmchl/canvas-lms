@@ -42,7 +42,7 @@ export async function POST(req) {
   const session = await getSession();
   if (!session || session.role !== "student") return err("Students only", 403);
 
-  const { assignmentId, content } = await req.json();
+  const { assignmentId, content, attachments = [] } = await req.json();
   if (!assignmentId || !content) return err("assignmentId and content required");
 
   const assignment = await Assignment.findById(assignmentId);
@@ -60,6 +60,7 @@ export async function POST(req) {
     course: assignment.course,
     student: session.id,
     content,
+    attachments,
     status: "submitted",
   });
 

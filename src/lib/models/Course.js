@@ -22,4 +22,17 @@ courseSchema.virtual("enrollmentCount", {
   ref: "Enrollment", localField: "_id", foreignField: "course", count: true,
 });
 
+courseSchema.index({ instructor: 1 });
+courseSchema.index({ published: 1, instructor: 1 });
+
+courseSchema.pre("findOneAndDelete", async function (next) {
+  const doc = await this.model.findOne(this.getQuery());
+  if (doc) {
+    await mongoose.model("Assignment").deleteMany({ course: doc._id });
+    await mongoose.model("Enrollment").deleteMany({ course: doc._id });
+    await mongoose.model("Submission").deleteMany({ course: doc._id });
+  }
+  next();
+});
+
 export default mongoose.models.Course || mongoose.model("Course", courseSchema);

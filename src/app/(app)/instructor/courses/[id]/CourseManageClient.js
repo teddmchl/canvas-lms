@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import RichTextEditor from "@/components/RichTextEditor";
+import DOMPurify from "isomorphic-dompurify";
 
 const COLORS = [
   "#1d4ed8", "#0891b2", "#059669", "#d97706",
@@ -158,7 +160,7 @@ export default function CourseManageClient({ course: initial, assignments: initi
               {course.description && (
                 <div style={{ display: "flex", padding: ".6rem 0", fontSize: ".92rem" }}>
                   <span style={{ width: 140, color: "var(--ink-faint)", flexShrink: 0 }}>Description</span>
-                  <span style={{ color: "var(--ink-mid)" }}>{course.description}</span>
+                  <div className="prose-content" style={{ color: "var(--ink-mid)" }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(course.description) }} />
                 </div>
               )}
             </div>
@@ -198,8 +200,7 @@ export default function CourseManageClient({ course: initial, assignments: initi
                 </div>
                 <div className="form-group">
                   <label htmlFor="assign-desc" className="form-label">Instructions</label>
-                  <textarea id="assign-desc" className="form-textarea" rows={3} placeholder="What should students do?"
-                    value={newAssign.description} onChange={e => setNewAssign(p => ({ ...p, description: e.target.value }))} />
+                  <RichTextEditor value={newAssign.description} onChange={val => setNewAssign(p => ({ ...p, description: val }))} placeholder="What should students do?" />
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end", gap: ".75rem" }}>
                   <button type="button" onClick={() => setAddingAssign(false)} className="btn btn-secondary btn-sm">Cancel</button>
@@ -249,7 +250,7 @@ export default function CourseManageClient({ course: initial, assignments: initi
               </div>
               <div className="form-group">
                 <label htmlFor="course-desc" className="form-label">Description</label>
-                <textarea id="course-desc" className="form-textarea" rows={4} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+                <RichTextEditor value={form.description} onChange={val => setForm(p => ({ ...p, description: val }))} placeholder="Write a course description..." />
               </div>
               <div className="form-row">
                 <div className="form-group">

@@ -3,6 +3,7 @@ import { Enrollment } from "@/lib/models/index";
 import Course from "@/lib/models/Course";
 import { getSession } from "@/lib/auth";
 import { ok, err } from "@/lib/api";
+import { sendEmail } from "@/lib/email";
 
 /* POST /api/enrollments — enroll student in course */
 export async function POST(req) {
@@ -20,6 +21,19 @@ export async function POST(req) {
   if (existing) return err("Already enrolled", 409);
 
   const enrollment = await Enrollment.create({ course: courseId, student: session.id });
+
+  // Dispatch Transactional Email (Fire and forget)
+  sendEmail({
+    to: session.email,
+    subject: `Enrolled: ${course.title}`,
+    html: `
+      <h2>Welcome to ${course.title}!</h2>
+      <p>Hi ${session.name},</p>
+      <p>You have successfully enrolled in <strong>${course.title}</strong>.</p>
+      <p>You may now access all course materials and assignments from your dashboard.</p>
+    `
+  }).catch(e => console.error("Failed to send enrollment email:", e));
+
   return ok({ enrollment }, 201);
 }
 

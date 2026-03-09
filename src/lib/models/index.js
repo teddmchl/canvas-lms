@@ -6,6 +6,7 @@ const submissionSchema = new mongoose.Schema({
   course:     { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: true },
   student:    { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   content:    { type: String, trim: true }, // text submission
+  attachments: [{ type: String }],
   grade:      { type: Number, default: null, min: 0 },
   feedback:   { type: String, trim: true },
   gradedAt:   { type: Date },
@@ -15,7 +16,9 @@ const submissionSchema = new mongoose.Schema({
 
 /* Unique: one submission per student per assignment */
 submissionSchema.index({ assignment: 1, student: 1 }, { unique: true });
-
+submissionSchema.index({ course: 1, student: 1 });
+submissionSchema.index({ course: 1, createdAt: -1 });
+submissionSchema.index({ student: 1, status: 1 });
 /* ── Enrollment ── */
 const enrollmentSchema = new mongoose.Schema({
   course:  { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: true },

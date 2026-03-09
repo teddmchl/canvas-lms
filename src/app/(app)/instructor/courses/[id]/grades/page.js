@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import DOMPurify from "isomorphic-dompurify";
 
 function initials(name = "") {
   return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
@@ -33,17 +34,14 @@ export default function GradingPage({ params }) {
 
   const flash = (text) => { setMsg(text); setTimeout(() => setMsg(""), 3000); };
 
-  /* ── Fetch submissions (called on mount + polling) ── */
+  /* ── Fetch all submissions on mount ── */
   const fetchSubmissions = useCallback(async () => {
-    const url = filterAssign !== "all"
-      ? `/api/submissions?assignment=${filterAssign}`
-      : `/api/submissions?course=${courseId}`;
-    const r = await fetch(url);
+    const r = await fetch(`/api/submissions?course=${courseId}`);
     if (!r.ok) return;
     const data = await r.json();
     setSubmissions(data.submissions || []);
     setLastRefresh(new Date());
-  }, [courseId, filterAssign]);
+  }, [courseId]);
 
   /* ── Fetch assignments once ── */
   useEffect(() => {
@@ -52,12 +50,30 @@ export default function GradingPage({ params }) {
       .then(data => setAssignments(data.assignments || []));
   }, [courseId]);
 
-  /* ── Fetch submissions + 5s polling (real-time feel) ── */
+  /* ── Setup SSE (Server-Sent Events) for true real-time grading ── */
   useEffect(() => {
     fetchSubmissions();
-    const interval = setInterval(fetchSubmissions, 5000);
-    return () => clearInterval(interval);
-  }, [fetchSubmissions]);
+
+    const sse = new EventSource(`/api/submissions/stream?course=${courseId}`);
+    
+    sse.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "update" && data.submission) {
+        setSubmissions(prev => {
+          const exists = prev.some(s => s._id === data.submission._id);
+          if (exists) {
+            return prev.map(s => s._id === data.submission._id ? data.submission : s);
+          }
+          return [data.submission, ...prev]; // Prepend new submission
+        });
+        setLastRefresh(new Date());
+      }
+    };
+
+    sse.onerror = () => console.warn("SSE connection error, attempting to reconnect...");
+
+    return () => sse.close();
+  }, [courseId, fetchSubmissions]);
 
   /* ── When a submission is selected, pre-fill grade if already graded ── */
   useEffect(() => {
@@ -207,9 +223,28 @@ export default function GradingPage({ params }) {
                   </div>
 
                   {/* Submission content */}
-                  <div style={{ background: "var(--parchment)", border: "1px solid var(--rule)", borderRadius: "var(--radius)", padding: "1.25rem 1.5rem", marginBottom: "1.75rem", fontFamily: "var(--ff-serif)", fontSize: "1rem", lineHeight: 1.75, color: "var(--ink-mid)", minHeight: 120, whiteSpace: "pre-wrap" }}>
-                    {selected.content || <em style={{ color: "var(--ink-faint)" }}>No content</em>}
+                  <div className="prose-content" style={{ background: "var(--parchment)", border: "1px solid var(--rule)", borderRadius: "var(--radius)", padding: "1.25rem 1.5rem", marginBottom: "1.75rem", fontFamily: "var(--ff-serif)", fontSize: "1rem", lineHeight: 1.75, color: "var(--ink-mid)", minHeight: 120 }}>
+                    {selected.content ? (
+                      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selected.content) }} />
+                    ) : (
+                      <em style={{ color: "var(--ink-faint)" }}>No content</em>
+                    )}
                   </div>
+
+                  {/* Attachments */}
+                  {selected.attachments && selected.attachments.length > 0 && (
+                    <div style={{ marginBottom: "1.75rem" }}>
+                      <div style={{ fontSize: ".72rem", fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--ink-faint)", marginBottom: ".6rem" }}>Attached Files</div>
+                      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                        {selected.attachments.map((url, i) => (
+                          <a key={i} href={url} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: ".5rem", fontSize: ".88rem", background: "var(--parchment-2)", padding: ".5rem .75rem", borderRadius: "var(--radius-sm)", border: "1px solid var(--rule)", color: "var(--blue)", textDecoration: "none" }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+                            Attachment {i + 1}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Grade form */}
                   <form onSubmit={submitGrade}>

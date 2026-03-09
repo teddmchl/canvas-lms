@@ -439,10 +439,68 @@ small {
   background: #fff;
 }
 
-.form-textarea {
-  resize: vertical;
+.search-bar {
+  display: flex;
+  gap: .75rem;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.search-input {
+  flex: 1;
+  padding: .75rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-family: var(--ff-sans);
+  font-size: .95rem;
+  background: #fff;
+  transition: border-color .2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+/* TipTap Editor Styles */
+.tiptap-content .ProseMirror {
+  outline: none;
+  font-family: var(--ff-serif);
   line-height: 1.6;
-  min-height: 120px;
+}
+
+.tiptap-content .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--ink-faint);
+  pointer-events: none;
+  height: 0;
+}
+
+.tiptap-content .ProseMirror h2,
+.tiptap-content .ProseMirror h3 {
+  font-family: var(--ff-serif);
+  color: var(--ink);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tiptap-content .ProseMirror h2 {
+  font-size: 1.6rem;
+}
+
+.tiptap-content .ProseMirror h3 {
+  font-size: 1.3rem;
+}
+
+.tiptap-content .ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.tiptap-content .ProseMirror p {
+  margin-bottom: 1rem;
 }
 
 .form-hint {

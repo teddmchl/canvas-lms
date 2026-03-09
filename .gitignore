@@ -1,4 +1,22 @@
-.next/
+# core
 node_modules/
-.env.local
+.next/
+out/
+build/
+.vercel
+*.log
+*.local
+
+# secrets
+.env
+.env*.local
+
+# os
 .DS_Store
+Thumbs.db
+
+# vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json

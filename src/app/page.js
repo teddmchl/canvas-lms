@@ -54,12 +54,12 @@ export default function LandingPage() {
         <div className="container">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
             {[
-              { icon: "📚", title: "Course Creation", desc: "Build structured courses with modules, descriptions, and difficulty levels. Publish when you're ready.", role: "Instructors" },
-              { icon: "📝", title: "Assignments & Grading", desc: "Create assignments with deadlines and max points. Grade submissions with written feedback in real time.", role: "Instructors" },
-              { icon: "📊", title: "Course Analytics", desc: "See grade distributions, submission rates, and student progress at a glance.", role: "Instructors" },
-              { icon: "🎓", title: "Course Enrollment", desc: "Browse the catalogue and enroll in courses that match your goals.", role: "Students" },
-              { icon: "✍️", title: "Assignment Submission", desc: "Submit your work, receive instructor feedback, and track your grades across all courses.", role: "Students" },
-              { icon: "📈", title: "Progress Tracking", desc: "See your grades, completed assignments, and performance at a glance.", role: "Students" },
+              { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>, title: "Course Creation", desc: "Build structured courses with modules, descriptions, and difficulty levels. Publish when you're ready.", role: "Instructors" },
+              { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>, title: "Assignments & Grading", desc: "Create assignments with deadlines and max points. Grade submissions with written feedback in real time.", role: "Instructors" },
+              { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M3 21c4-8 6-14 9-14s5 6 9 14"/></svg>, title: "Course Analytics", desc: "See grade distributions, submission rates, and student progress at a glance.", role: "Instructors" },
+              { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>, title: "Course Enrollment", desc: "Browse the catalogue and enroll in courses that match your goals.", role: "Students" },
+              { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>, title: "Assignment Submission", desc: "Submit your work, receive instructor feedback, and track your grades across all courses.", role: "Students" },
+              { icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, title: "Progress Tracking", desc: "See your grades, completed assignments, and performance at a glance.", role: "Students" },
             ].map((f) => (
               <div key={f.title} style={{
                 background: "#fff",

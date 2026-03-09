@@ -145,7 +145,9 @@ export default function GradingPage({ params }) {
 
         {filtered.length === 0 ? (
           <div className="empty-state" style={{ background: "#fff", border: "1px solid var(--rule)", borderRadius: "var(--radius)" }}>
-            <div className="empty-icon">📭</div>
+            <div className="empty-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            </div>
             <div className="empty-title">No submissions yet</div>
             <div className="empty-sub">Submissions will appear here automatically every 5 seconds</div>
           </div>
@@ -185,7 +187,9 @@ export default function GradingPage({ params }) {
             <div className="grading-main">
               {!selected ? (
                 <div className="empty-state" style={{ padding: "3rem 1rem" }}>
-                  <div className="empty-icon">👈</div>
+                  <div className="empty-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                  </div>
                   <div className="empty-title">Select a submission</div>
                   <div className="empty-sub">Click a student on the left to review their work</div>
                 </div>

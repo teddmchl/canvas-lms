@@ -2,7 +2,7 @@
 
 A learning management platform with course creation, assignment submission, and real-time grading. Built with Next.js 14, Node.js API routes, and MongoDB.
 
-**Design aesthetic:** Academic editorial — Source Serif 4 headings, Outfit body, warm parchment palette.
+**Design aesthetic:** Academic editorial — Source Serif 4 headings, Outfit body, warm parchment palette. **Light mode is the intentional, audience-appropriate default for this learning platform.**
 
 ---
 
